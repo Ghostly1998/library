@@ -1,0 +1,12 @@
+#book-form {
+  display: none;
+}
+.btn-container {
+  display: flex;
+}
+.book-card {
+  border: solid 1px gray
+}
+.book-info {
+  list-style: none;
+}
