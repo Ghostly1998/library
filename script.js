@@ -33,20 +33,21 @@ function displayBooks () {
   const readStatus = document.createElement('li');
   const btnContainer = document.createElement('div');
   btnContainer.classList.add('btn-container');
-  const removeBookBtn = document.createElement('button');
+  let removeBookBtn = document.createElement('button');
   removeBookBtn.classList.add('removebook-btn');
   removeBookBtn.innerText = 'Remove Book';
-  const changeReadStatus = document.createElement('button');
+  let changeReadStatus = document.createElement('button');
   changeReadStatus.classList.add('change-readstatus');
   changeReadStatus.innerText = 'Change Read Status';
   btnContainer.appendChild(changeReadStatus);
   btnContainer.appendChild(removeBookBtn);
   bookCard.appendChild(btnContainer);
   container.appendChild(bookCard);
-
+  
   for( let i = 0; i < books.length; i++){
     bookCard.setAttribute('data-value', i)
     removeBookBtn.setAttribute('data-value', i)
+    changeReadStatus.setAttribute('data-value', i)
     // console.log(bookInfo.getAttribute('value'));
     bookName.innerText = 'Title: ' + books[i].title;
     bookInfo.appendChild(bookName);
@@ -56,10 +57,45 @@ function displayBooks () {
     bookInfo.appendChild(pages);
     readStatus.innerText = 'Read Status: ' + books[i].readStatus;
     bookInfo.appendChild(readStatus);    
-  }  
+  } 
+  
+  //change read status 
+  changeReadStatus = document.querySelectorAll('.change-readstatus');
+  changeReadStatus.forEach(item => {
+    item.addEventListener('click', e => {
+      readStatusBtn = e.target.getAttribute('data-value');
+      // console.log(readStatusBtn)
+      const bookCard = document.querySelectorAll('.book-card');
+      books[readStatusBtn].readStatus = 'not read';
+      // console.log(books);
+      displayBooks();
+    })
+  })
+ 
+  
+  //remove book from display and array
+  removeBookBtn = document.querySelectorAll('.removebook-btn');
+  removeBookBtn.forEach((bookItem) => {
+  bookItem.addEventListener('click', (e) => {
+    let btnValue = e.target.getAttribute('data-value');
+    console.log(btnValue)
+    const container = document.getElementById('container');
+    const bookCard = document.querySelectorAll('.book-card');
+    bookCard.forEach((item) => {
+      let cardValue = e.target.getAttribute('data-value')
+      console.log(cardValue)
+      if(btnValue === cardValue) {
+        container.removeChild(bookCard[cardValue]);
+        books.splice(btnValue, 1); 
+        
+      }
+    });
+  });
+ });
 }
 
 //add new book to array and display the book
+
 addBookBtn.addEventListener('click', () => {
   const bookForm = document.getElementById('book-form');
   bookForm.style.display = 'block';
@@ -83,20 +119,4 @@ const book1 = new Book('hello', 'world', 34, 'read');
 const book2 = new Book('jdsfkjdsk', 'wrtrt', 345, 'read');
 
 //remove books from array and display
-const removeBookBtn = document.querySelectorAll('.removebook-btn');
-removeBookBtn.forEach((bookItem) => {
-  bookItem.addEventListener('click', (e) => {
-    let btnValue = bookItem.getAttribute('data-value');
-    // console.log(btnValue)
-    const container = document.getElementById('container');
-    const bookCard = document.querySelectorAll('.book-card');
-    bookCard.forEach((item) => {
-      let cardValue = item.getAttribute('data-value')
-      // console.log(cardValue)
-      if(btnValue === Number(cardValue)) {
-        container.removeChild(bookCard[btnValue]);
-        books.splice(btnValue, 1); 
-      }
-    });
-  });
-});
+
